@@ -1,0 +1,100 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, Button } from 'react-native';
+
+const ContactApp = () => {
+  const [contacts, setContacts] = useState([]);
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [search, setSearch] = useState('');
+
+  const addContact = () => {
+    const newContact = { name, phone, email };
+    setContacts([...contacts, newContact]);
+    setName('');
+    setPhone('');
+    setEmail('');
+  };
+
+  const editContact = (index) => {
+    const updatedContacts = [...contacts];
+    updatedContacts[index].name = name;
+    updatedContacts[index].phone = phone;
+    updatedContacts[index].email = email;
+    setContacts(updatedContacts);
+    setName('');
+    setPhone('');
+    setEmail('');
+  };
+
+  const deleteContact = (index) => {
+    const updatedContacts = [...contacts];
+    updatedContacts.splice(index, 1);
+    setContacts(updatedContacts);
+  };
+
+  return (
+    <View>
+      <Text>Add a Contact:</Text>
+      <TextInput
+        placeholder="Name"
+        value={name}
+        onChangeText={(text) => setName(text)}
+      />
+      <TextInput
+        placeholder="Phone"
+        value={phone}
+        onChangeText={(text) => setPhone(text)}
+      />
+      <TextInput
+        placeholder="Email"
+        value={email}
+        onChangeText={(text) => setEmail(text)}
+      />
+      <Button title="Add Contact" onPress={addContact} />
+
+      <Text>Edit a Contact:</Text>
+      {contacts.map((contact, index) => (
+        <View key={index}>
+          <TextInput
+            placeholder="Name"
+            value={name}
+            onChangeText={(text) => setName(text)}
+          />
+          <TextInput
+            placeholder="Phone"
+            value={phone}
+            onChangeText={(text) => setPhone(text)}
+          />
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
+          />
+          <Button title="Save Changes" onPress={() => editContact(index)} />
+          <Button title="Delete Contact" onPress={() => deleteContact(index)} />
+        </View>
+      ))}
+
+      <Text>Search Contacts:</Text>
+      <TextInput
+        placeholder="Search"
+        value={search}
+        onChangeText={(text) => setSearch(text)}
+      />
+      {contacts
+        .filter((contact) =>
+          contact.name.toLowerCase().includes(search.toLowerCase())
+        )
+        .map((contact, index) => (
+          <View key={index}>
+            <Text>{contact.name}</Text>
+            <Text>{contact.phone}</Text>
+            <Text>{contact.email}</Text>
+          </View>
+        ))}
+    </View>
+  );
+};
+
+export default ContactApp;
